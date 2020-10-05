@@ -1,3 +1,0 @@
-# YelpCamp
-
-### Refactored by Avdhesh
