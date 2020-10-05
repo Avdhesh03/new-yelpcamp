@@ -28,6 +28,9 @@
                    <p>
                        <a href="/campgrounds/<%= campground._id %>" class="btn btn-primary">More Info</a>
                    </p>
+                    <form action="/campgrounds/addToCart/<%= campground._id %>" method="POST">
+                        <button class="btn btn-primary">Add to cart</button>
+                    </form>
                 </div>
             </div>
         <% }); %>

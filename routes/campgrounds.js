@@ -1,7 +1,9 @@
 var express = require("express");
 var router  = express.Router();
 var Campground = require("../models/campground");
+var User=require("../models/user");
 var Comment = require("../models/comment");
+var Order=require("../models/order");
 var middleware = require("../middleware");
 var geocoder = require('geocoder');
 var { isLoggedIn, checkUserCampground, checkUserComment, isAdmin, isSafe } = middleware; // destructuring assignment
@@ -98,6 +100,25 @@ router.get("/:id/edit", isLoggedIn, checkUserCampground, function(req, res){
   res.render("campgrounds/edit", {campground: req.campground});
 });
 
+router.get("/show/cart",isLoggedIn,function(req,res){
+  
+  req.user
+  .populate('cart.items.campId')
+  .execPopulate()
+ .then(user=>{
+   const products=user.cart.items;
+   console.log(products);
+   res.render("campgrounds/cart",{
+     products:products
+   })
+   
+     // res.render("cart",{
+     //  products:products
+     // })
+  })
+})
+
+
 // PUT - updates campground in the database
 router.put("/:id", isSafe, function(req, res){
   // geocoder.geocode(req.body.location, function (err, data) {
@@ -139,6 +160,37 @@ router.delete("/:id", isLoggedIn, checkUserCampground, function(req, res) {
       }
     })
 });
+
+router.post("/addToCart/:id",isLoggedIn,function(req,res){
+
+  const campId=req.params.id;
+  Campground.findById(campId)
+  .then(camp=>{
+    console.log(camp);
+    
+    return req.user.addToCart(camp);
+  })
+  .then(result=>{
+    console.log(result.cart.items);
+
+    res.redirect('back');
+  })
+
+})
+
+router.post("/cart-delete-item",isLoggedIn,function(req,res){
+const prodId=req.body.productId;
+req.user
+ .removeFromCart(prodId)
+ .then(result=>{
+   res.redirect('/campgrounds/show/cart')
+ })
+ .catch(err=>{
+   console.log(err)
+ })
+ 
+})
+
 
 module.exports = router;
 

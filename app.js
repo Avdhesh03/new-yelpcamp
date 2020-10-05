@@ -18,7 +18,8 @@ require('dotenv').load;
 //requiring routes
 var commentRoutes    = require("./routes/comments"),
     campgroundRoutes = require("./routes/campgrounds"),
-    indexRoutes      = require("./routes/index")
+    indexRoutes      = require("./routes/index"),
+    OrderRoutes      =require("./routes/Order")
     
 // assign mongoose promise library and connect to database
 mongoose.Promise = global.Promise;
@@ -61,6 +62,7 @@ app.use(function(req, res, next){
 
 
 app.use("/", indexRoutes);
+app.use("/order",OrderRoutes);
 app.use("/campgrounds", campgroundRoutes);
 app.use("/campgrounds/:id/comments", commentRoutes);
 

@@ -1,0 +1,40 @@
+<%- include ('../partials/header') %>
+<div class="row text-center flex-wrap" id="campground-grid">
+    <% products.forEach(function(product){ %>
+        <div class="col-md-3 col-sm-6">
+            <div class="thumbnail">
+               <img src="<%= product.campId.image %>">
+               <div class="caption">
+                   <h4><%= product.campId.name %></h4>
+               </div>
+               <div class="caption">
+                <h4><%= product.campId.cost %></h4>
+            </div>
+            <div class="caption">
+                <h4>No. of Days:<%= product.days %></h4>
+            </div>
+              
+               
+            
+        </div>
+    <% }); %>
+    <div>
+        <h2>Total:<%= totalSum %></h2>
+    </div>
+    <div>
+        <button id="order-btn">Order!</button>
+        <script src="https://js.stripe.com/v3/"></script>
+        <script>
+            var stripe=Stripe('pk_test_51HUzv6EfK7M42wO2QqlJBxSf5dRqIVwBE8Fw0RpErIBZngxDk0I5Jca7RJO8vnSSfDKlxGwBW6cguypUHtXg9Vza00esyXtg9n');
+            var orderBtn =document.getElementById('order-btn');
+            orderBtn.addEventListener('click',function(){
+                  stripe.redirectToCheckout({
+                      sessionId:'<%= sessionId %>'
+                  });
+            })
+        </script>
+    </div>
+   
+</div>
+
+<%- include ('../partials/footer') %>
