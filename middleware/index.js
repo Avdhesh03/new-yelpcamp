@@ -12,7 +12,7 @@ module.exports = {
     Campground.findById(req.params.id, function(err, foundCampground){
       if(err || !foundCampground){
           console.log(err);
-          
+          req.flash('error', 'Payment Done!');
           res.redirect('/campgrounds');
       } else if(foundCampground.author.id.equals(req.user._id) || req.user.isAdmin){
           req.campground = foundCampground;
